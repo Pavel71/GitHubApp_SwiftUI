@@ -33,21 +33,24 @@ struct HomeView: View {
   
   var body: some View {
     
-    ZStack(alignment: .top) {
-      
-      VStack {
-        SearchBarView(
-          text: $viewModel.searchText,
-          placeHolder: "Search..")
+    NavControllerView(transition: .custom(AnyTransition.push)) {
+      ZStack(alignment: .top) {
+
+        VStack {
+          SearchBarView(
+            text: self.$viewModel.searchText,
+            placeHolder: "Search..")
+         
+          UserList(viewModel: self.viewModel)
+         
+          
+         }// Generall Vstack
         
-        UserList(viewModel: viewModel)
-        
-        //        Section(footer:Text("") ) {
-        
-        
-      }
-      
+      }// Zstack
     }
+
+    
+ 
   }
   
   
@@ -59,7 +62,9 @@ struct HomeView: View {
     
     @ObservedObject var viewModel : HomeViewModel
     
-    @ViewBuilder private func showLoading() -> some View {
+//    @State var didTapCell = false
+    
+    @ViewBuilder private var  showLoading : some View {
       if viewModel.isLoading {
         
         Divider()
@@ -73,27 +78,23 @@ struct HomeView: View {
     
     var body: some View {
       
-      Section(footer: self.showLoading()) {
-        
-        List() {  
+      
+        Section(footer: self.showLoading) {
           
-          ForEach(self.viewModel.models) { (model)  in
-            UserAccountListCell(model: model)
-             .onAppear {self.viewModel.isLastItem = model}
+          List(viewModel.models,id:\.self) { model in
+            
+            NavPushButton(destination: DetailsView()) {
+              UserAccountListCell(model: model)
+              .onAppear {self.viewModel.isLastItem = model}
+            }
+
+            
+          }.padding(.vertical)
+            .dissmisKeyaboardThanTap()
+            .alert(item: $viewModel.alertDataInfo) { (alert) -> Alert in
+              Alert(title: Text(alert.title), message: Text(alert.message), dismissButton: .cancel())
           }
-          
-//          VStack(alignment: .leading, spacing: 5) {
-//            UserAccountListCell(model: model)
-//
-//          }// Stakc Cell
-           
-          
-          
-        }.padding(.vertical)
-          .dissmisKeyaboardThanTap()
-          .alert(item: $viewModel.alertDataInfo) { (alert) -> Alert in
-            Alert(title: Text(alert.title), message: Text(alert.message), dismissButton: .cancel())
-        }
+        
       }// List
     } // Section
     

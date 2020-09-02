@@ -121,15 +121,15 @@ final class HomeViewModel : ObservableObject {
     }
       .subscribe(on: DispatchQueue.global())
       .receive(on: DispatchQueue.main)
-      .sink(receiveValue: { [weak self] (models) in
+      .sink(receiveValue: { [weak self] (_models) in
         
         withAnimation {
           self?.isLoading    = false
         }
+   
+        let filterArray = _models.filter{self?.models.contains($0) == false} 
         
-        // Чтобы было плавное добавление новых юзеров нужно делать аппенд за исключением уже имеющихся обхектов
-        let appendModels = models.dropFirst(self!.searchItems - 15)
-        self?.models.append(contentsOf: appendModels)
+        self?.models.append(contentsOf: filterArray)
         
       })
     .store(in: &cancellable)

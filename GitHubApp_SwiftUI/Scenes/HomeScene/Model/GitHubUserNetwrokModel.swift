@@ -35,4 +35,13 @@ struct GitHubUser : Decodable,Identifiable,Hashable {
         case reposUrl
         case type
     }
+
+  
+}
+
+extension  GitHubUser : Equatable {
+  
+  static func ==(lhs: GitHubUser,rhs:GitHubUser) -> Bool {
+    return lhs.username == rhs.username
+  }
 }
