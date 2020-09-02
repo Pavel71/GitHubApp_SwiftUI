@@ -19,8 +19,8 @@ struct UsersSearchResult: Decodable {
     }
 }
 
-struct GitHubUser : Decodable,Hashable {
-  
+struct GitHubUser : Decodable,Identifiable,Hashable {
+    var id           = UUID()
     var avatarUrl    : URL
     var username     : String
     let url          : URL

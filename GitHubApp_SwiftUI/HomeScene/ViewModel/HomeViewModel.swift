@@ -18,63 +18,125 @@ final class HomeViewModel : ObservableObject {
   // 2. Загрузка данных по поиску
   
   
-  // Input
-  
+  //MARK: - Input
+  @Published var isLastItem    : GitHubUser?
   @Published var searchText    : String = ""
   
-  // Output
+  //MARK: - Output
   @Published var models        : [GitHubUser] = []
   @Published var alertDataInfo : AlertDataInfo?
+  @Published var isLoading     : Bool = false
   
-  private var isSearchTextEmpty : AnyPublisher<Bool,Never> {
-     
-     $searchText
-       .debounce(for: 0.5, scheduler: RunLoop.main)
-       .removeDuplicates()
-       .map {
-         $0.isEmpty
-      }
+  private var searchItems : Int = 15
+  
+  
+  
+  
+  
+  
+  // MARK: Publishers
+  
+  
+  
+  
+  // MARK: - Load New Users Publisher
+  private var loadNewUsersPublisher : AnyPublisher<[GitHubUser],Never>  {
+    
+    let endPoint: Endpoint = .userSearch(searchFilter: self.searchText, pages: self.searchItems)
+    
+    return GitHubApi.shared.fetchUsersWithError(from: endPoint)
+      .catch { error -> AnyPublisher<[GitHubUser], Never> in
+        print("Error Block")
+        self.alertDataInfo = AlertDataInfo(title: "Ощибка при Загрузке доп пользователей", message: error.localizedDescription)
+        return self.emptyJust
+    }.eraseToAnyPublisher()
+  }
+  
+  // MARK: - Is Last Item Publisher
+  private var isLastItemScrolled : AnyPublisher<Bool,Never> {
+
+    $isLastItem
+      .map({ (lastUser) -> Bool in
+         
+        guard
+          let lastU = lastUser
+        else {return false}
+       
+        return self.models.isLastItem(lastU)
+
+      })           // 1 - Чек Nil + Чек Ласт Item
+      .filter{$0} // 2 - Только если последний
       .eraseToAnyPublisher()
-   }
+  }
   
   private var emptyJust:AnyPublisher<[GitHubUser],Never> = Just([]).eraseToAnyPublisher()
   
-  private var text :AnyPublisher<String,Never> {
+  private var text : AnyPublisher<String,Never> {
     
     $searchText
-      .debounce(for: 0.5, scheduler: RunLoop.main)
+      .debounce(for: 0.3, scheduler: RunLoop.main)
       .removeDuplicates()
-      .map {$0}
      .eraseToAnyPublisher()
   }
   
   init() {
     
   
-    
-    $searchText
-      .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
-     .removeDuplicates()
+    // MARK: Search Text  Input
+    text
+
       .flatMap { (searchText) -> AnyPublisher<[GitHubUser],Never> in
         
-        guard  searchText.isEmpty == false else {return self.emptyJust}
+        guard
+          searchText.isEmpty == false,
+          self.isLoading     == false
+        else {return self.emptyJust}
         
-        self.models = []
+        self.isLoading   = true
+        self.models      = []
+        self.searchItems = 15
         
         print("Search Text",searchText)
-        let endPoint: Endpoint = .userSearch(searchFilter: searchText, pages: 15)
-        return GitHubApi.shared.fetchUsersWithError(from: endPoint)
-          .catch { error -> AnyPublisher<[GitHubUser], Never> in
-            print("Error Block")
-            self.alertDataInfo = AlertDataInfo(title: "Ощибка при поиске пользователей", message: error.localizedDescription)
-            return self.emptyJust
-        }.eraseToAnyPublisher()
+        return self.loadNewUsersPublisher
         
     }.subscribe(on: DispatchQueue.global())
       .receive(on: DispatchQueue.main)
-      .sink(receiveValue: { [weak self] in self?.models = $0})
+      .sink(receiveValue: { [weak self] in
+        self?.isLoading = false
+        self?.models = $0})
+    .store(in: &cancellable)
+    
+    
+    // MARK: Is Last Item Input
+    isLastItemScrolled
+      .flatMap { (_) -> AnyPublisher<[GitHubUser],Never> in
+        
+        withAnimation {
+           self.isLoading    = true
+        }
+       
+        self.searchItems += 15
+        return self.loadNewUsersPublisher
+        
+    }
+      .subscribe(on: DispatchQueue.global())
+      .receive(on: DispatchQueue.main)
+      .sink(receiveValue: { [weak self] (models) in
+        
+        withAnimation {
+          self?.isLoading    = false
+        }
+        
+        // Чтобы было плавное добавление новых юзеров нужно делать аппенд за исключением уже имеющихся обхектов
+        let appendModels = models.dropFirst(self!.searchItems - 15)
+        self?.models.append(contentsOf: appendModels)
+        
+      })
     .store(in: &cancellable)
       
+    
+    
+    
 
     
     

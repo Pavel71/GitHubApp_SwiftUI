@@ -18,6 +18,7 @@
 		05490A0824FE86930088A02E /* AlertDataInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05490A0724FE86930088A02E /* AlertDataInfo.swift */; };
 		05490A0A24FE881D0088A02E /* DismissKeyboard+ Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05490A0924FE881D0088A02E /* DismissKeyboard+ Extension.swift */; };
 		05490A0C24FEC3180088A02E /* Tasks.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05490A0B24FEC3180088A02E /* Tasks.txt */; };
+		05AA36A224FF912300C62A16 /* Collection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA36A124FF912300C62A16 /* Collection+Extension.swift */; };
 		05B7E3C924FE594C007E216F /* GitHubUserNetwrokModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3C824FE594C007E216F /* GitHubUserNetwrokModel.swift */; };
 		05B7E3CC24FE5966007E216F /* GitHubApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3CB24FE5966007E216F /* GitHubApi.swift */; };
 		05B7E3CE24FE5BBC007E216F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3CD24FE5BBC007E216F /* HomeViewModel.swift */; };
@@ -41,6 +42,7 @@
 		05490A0724FE86930088A02E /* AlertDataInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDataInfo.swift; sourceTree = "<group>"; };
 		05490A0924FE881D0088A02E /* DismissKeyboard+ Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DismissKeyboard+ Extension.swift"; sourceTree = "<group>"; };
 		05490A0B24FEC3180088A02E /* Tasks.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tasks.txt; sourceTree = "<group>"; };
+		05AA36A124FF912300C62A16 /* Collection+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Extension.swift"; sourceTree = "<group>"; };
 		05B7E3C824FE594C007E216F /* GitHubUserNetwrokModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubUserNetwrokModel.swift; sourceTree = "<group>"; };
 		05B7E3CB24FE5966007E216F /* GitHubApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubApi.swift; sourceTree = "<group>"; };
 		05B7E3CD24FE5BBC007E216F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -150,9 +152,8 @@
 		0503FD2A24FE581E00BCF7E8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				05B7E3DA24FE684E007E216F /* UserImageStyle.swift */,
-				05B7E3D824FE6819007E216F /* UserImage.swift */,
-				0503FD2824FE581A00BCF7E8 /* SearchBarView.swift */,
+				05490A0E24FF88570088A02E /* SearchBarView */,
+				05490A0D24FF88420088A02E /* UserImage */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -161,8 +162,26 @@
 			isa = PBXGroup;
 			children = (
 				05490A0924FE881D0088A02E /* DismissKeyboard+ Extension.swift */,
+				05AA36A124FF912300C62A16 /* Collection+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		05490A0D24FF88420088A02E /* UserImage */ = {
+			isa = PBXGroup;
+			children = (
+				05B7E3DA24FE684E007E216F /* UserImageStyle.swift */,
+				05B7E3D824FE6819007E216F /* UserImage.swift */,
+			);
+			path = UserImage;
+			sourceTree = "<group>";
+		};
+		05490A0E24FF88570088A02E /* SearchBarView */ = {
+			isa = PBXGroup;
+			children = (
+				0503FD2824FE581A00BCF7E8 /* SearchBarView.swift */,
+			);
+			path = SearchBarView;
 			sourceTree = "<group>";
 		};
 		05B7E3CA24FE5953007E216F /* NetWorkService */ = {
@@ -266,6 +285,7 @@
 				05B7E3C924FE594C007E216F /* GitHubUserNetwrokModel.swift in Sources */,
 				05B7E3D724FE65D3007E216F /* ImageLoader.swift in Sources */,
 				05B7E3CC24FE5966007E216F /* GitHubApi.swift in Sources */,
+				05AA36A224FF912300C62A16 /* Collection+Extension.swift in Sources */,
 				0503FD2024FE554400BCF7E8 /* HomeView.swift in Sources */,
 				05B7E3DB24FE684E007E216F /* UserImageStyle.swift in Sources */,
 				05490A0A24FE881D0088A02E /* DismissKeyboard+ Extension.swift in Sources */,

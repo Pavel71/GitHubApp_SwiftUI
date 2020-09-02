@@ -16,9 +16,18 @@ struct SearchBarView: View {
     var body: some View {
       
      HStack {
-          Image(systemName: "magnifyingglass")
-              .foregroundColor(.gray).font(.headline)
-          TextField(placeHolder, text: $text)
+        Image(systemName: "magnifyingglass")
+          .foregroundColor(.secondary).font(.title)
+        TextField(placeHolder, text: $text)
+        
+        Button(action: {
+          print("Delete text")
+          self.text = ""
+        }) {
+          Image(systemName: "xmark.circle")
+            .foregroundColor(.secondary).font(.title)
+        }
+         
       }
       .padding()
       .overlay(
