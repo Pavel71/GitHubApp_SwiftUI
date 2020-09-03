@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 
 final class DetailViewModel : ObservableObject {
@@ -18,14 +19,15 @@ final class DetailViewModel : ObservableObject {
   // MARK: -  Output
   
   @Published var detailModel: DetailModel = DetailModel(
-  login     : "--\\--",
+  login     : "",
   avatarUrl : nil,
-  name      : "--\\--",
-  createdAt : "--\\--",
-  location  : "--\\--")
+  name      : "",
+  createdAt : "",
+  location  : "")
   
   @Published var repos : [Repository] = []
   @Published var alertDataInfo : AlertDataInfo?
+  @Published var isLoading     = false
   
   
   // MARK: - Publishers
@@ -77,8 +79,15 @@ final class DetailViewModel : ObservableObject {
          .receive(on: DispatchQueue.main)
          .sink { (detailModel,repos) in
            print("Пришли repos,и  DetailModel")
-           self.detailModel = detailModel
-           self.repos       = repos
+          
+          withAnimation(Animation.easeOut(duration: 0.5)) {
+             
+             self.detailModel = detailModel
+             self.repos       = repos
+             self.isLoading   = false
+           }
+           
+          
        }.store(in: &cancellable)
     
     
@@ -98,6 +107,7 @@ final class DetailViewModel : ObservableObject {
 extension DetailViewModel {
   
   func loadDetailUser(userName: String) {
+    self.isLoading = true
     self.username = userName
   }
 }

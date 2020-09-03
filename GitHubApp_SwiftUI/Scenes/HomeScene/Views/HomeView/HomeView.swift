@@ -24,6 +24,7 @@ struct HomeView: View {
     } else {
       // To remove only extra separators below the list:
       UITableView.appearance().tableFooterView = UIView()
+      
     }
     
     

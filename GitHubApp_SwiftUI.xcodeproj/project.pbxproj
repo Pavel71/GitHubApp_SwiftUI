@@ -94,9 +94,9 @@
 		0503FD0724FE54A700BCF7E8 /* GitHubApp_SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				05490A0B24FEC3180088A02E /* Tasks.txt */,
 				0529437A24FFDC4100566633 /* CustomClasses */,
 				05AA36A424FFD04A00C62A16 /* Scenes */,
-				05490A0B24FEC3180088A02E /* Tasks.txt */,
 				05490A0624FE7FA70088A02E /* Extensions */,
 				05B7E3CA24FE5953007E216F /* NetWorkService */,
 				0503FD1D24FE54FC00BCF7E8 /* README.md */,

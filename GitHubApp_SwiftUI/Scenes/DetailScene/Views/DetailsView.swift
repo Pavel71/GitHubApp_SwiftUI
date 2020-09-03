@@ -62,7 +62,7 @@ struct DetailsView: View {
           Text("Login: ").font(.headline) +
             Text(viewModel.detailModel.login)
           Text("Name: ").font(.headline) +
-            Text(viewModel.detailModel.name ?? "--\\--")
+            Text(viewModel.detailModel.name ?? "")
         }
         Spacer()
       }.padding(.horizontal)
@@ -73,13 +73,17 @@ struct DetailsView: View {
           Text("Creatred At: ").font(.headline) +
             Text(viewModel.detailModel.createdAt)
           Text("Location: ").font(.headline) +
-            Text(viewModel.detailModel.location ?? "--\\--")
+            Text(viewModel.detailModel.location ?? "")
         }
       }.padding(.horizontal)
+      
+      
       
     } // General VStack
       .frame(maxWidth: .infinity)
       .background(sustemBackgroundColor)
+    
+      
   }
   
   
@@ -107,7 +111,7 @@ struct DetailsView: View {
       
       VStack(spacing:0) {
         navBar
-        header
+        header.animation(.default)
         ListRepos(models: viewModel.repos)
         
       }
@@ -116,9 +120,11 @@ struct DetailsView: View {
         self.loadUserDetail()
         
       }// Vstack
+        .transition(.opacity)
+        .id(viewModel.detailModel.createdAt)
          .alert(item: $viewModel.alertDataInfo) { (alert) -> Alert in
                      Alert(title: Text(alert.title), message: Text(alert.message), dismissButton: .cancel())
-                }
+    }
       
     }// Zstack
   }
@@ -178,25 +184,35 @@ struct RepoCell : View {
         Text(model.language ?? "--\\--")
         
         if self.isNeedMoreInfo {
-
-          Text("Updated: ").font(.headline) +
-          Text(model.updatedAt)
-          Text("Stars: ").font(.headline) +
-          Text("\(model.stars)")
- 
-            }
+          VStack(alignment:.leading,spacing: 10) {
+            Text("Updated: ").font(.headline) +
+            Text(model.updatedAt)
+            Text("Stars: ").font(.headline) +
+            Text("\(model.stars)")
+          }
+          .opacity(isNeedMoreInfo ? 1.0 : 0.0)
+          .transition(.push)
+   
+        }
+        
       }
+      
       Spacer()
       Button(action: {
-        withAnimation { ()  in
+        withAnimation(.easeOut) {
           self.isNeedMoreInfo.toggle()
         }
+          
+
       }) {
         Text("More Info")
           .foregroundColor(.blue)
       }
       
     }.padding(.vertical)// HStack
+      .transition(.slide)
+      .id("123")
+      .animation(.easeOut)
     
   }
 }
