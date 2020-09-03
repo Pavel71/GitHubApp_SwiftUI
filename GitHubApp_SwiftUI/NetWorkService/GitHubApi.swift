@@ -149,21 +149,21 @@ final class GitHubApi {
   
   // MARK: Search Users
   
-  func fetchUsers(from endpoint: Endpoint) -> AnyPublisher<[GitHubUser], Never> {
-    guard let url = endpoint.absoluteURL else {
-      return Just([]).eraseToAnyPublisher()
-    }
-    return fetch(url)
-      .map{(userSearcResult:UsersSearchResult) -> [GitHubUser] in
-        return userSearcResult.users
-      }
-      .replaceError(with: [GitHubUser]())                    // 3
-      .eraseToAnyPublisher()
-    
-    
-  }
+//  func fetchUsers(from endpoint: Endpoint) -> AnyPublisher<[GitHubUser], Never> {
+//    guard let url = endpoint.absoluteURL else {
+//      return Just([]).eraseToAnyPublisher()
+//    }
+//    return fetch(url)
+//      .map{(userSearcResult:UsersSearchResult) -> [GitHubUser] in
+//        return userSearcResult.users
+//      }
+//      .replaceError(with: [GitHubUser]())                    // 3
+//      .eraseToAnyPublisher()
+//    
+//    
+//  }
   
-  func fetchUsersWithError(from endpoint : Endpoint) -> AnyPublisher<[GitHubUser], GitHubApiError> {
+  func searchUsersWithError(from endpoint : Endpoint) -> AnyPublisher<[GitHubUser], GitHubApiError> {
     
     
       Future<[GitHubUser], GitHubApiError> { [unowned self] promise in
@@ -199,54 +199,44 @@ final class GitHubApi {
    
   }
   
+  func fetchUserDetail(from endpoint: Endpoint) -> AnyPublisher<DetailModel, GitHubApiError> {
+    
+    return Future <DetailModel, GitHubApiError> {[unowned self] promise in
+      
+      guard let url = endpoint.absoluteURL else {
+        return promise(.failure(.urlError(URLError(.unsupportedURL))))
+         }
+      
+      self.fetchErr(url)
+        .tryMap({ (detailModel) -> DetailModel in
+          return detailModel
+        })
+        .sink(receiveCompletion: { (complation) in
+          if case let .failure(error) = complation {
+            switch error {
+            case let urlError as URLError:
+              promise(.failure(.urlError(urlError)))
+            case let decodingError as DecodingError:
+              promise(.failure(.decodingError(decodingError)))
+            case let apiError as GitHubApiError:
+              promise(.failure(apiError))
+            default:
+              promise(.failure(.genericError))
+            }
+          }
+        }) { (detailModel) in
+          promise(.success(detailModel))
+      }.store(in: &self.subscriptions)
+      
+    }.eraseToAnyPublisher()
+   
+  }
+  
   private var subscriptions = Set<AnyCancellable>()
   
 }
 
 
-
-
-// MARK: Search Users
-//  func searchUsers(userName: String,
-//                  pages   : Int,
-//                  completion: @escaping (Result<UsersSearchResult,GitHubApiError>) -> Void
-//                  ) {
-//
-//    let endpoint:Endpoint = .userSearch(searchFilter: userName, pages: pages)
-//
-//    fetch(endPoint: endpoint) { data,response, error in
-//      // Error
-//      if let error = error {
-//        completion(.failure(.apiError(error)))
-//
-//      }
-//      // HTTP Response
-//      if let httpResponse  = response as? HTTPURLResponse,
-//        httpResponse.statusCode != 200 {
-//        completion(.failure(.responseError(httpResponse.statusCode)))
-//
-//      }
-//      // Data
-//      if let data  = data {
-//
-//        let results: UsersSearchResult? = self.convertNetworkDataToModel(data: data, type: UsersSearchResult.self)
-//
-//        if let res = results  {
-//          DispatchQueue.main.async {
-//              completion(.success(res))
-//          }
-//
-//        } else {
-//          completion(.failure(.decodingError))
-//
-//        }
-//
-//      }
-//
-//    }
-//
-//
-//  }
 //
 //      // MARK: - Fetch User
 //  func fetchUser(userName: String,

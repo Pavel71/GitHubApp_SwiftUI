@@ -44,7 +44,7 @@ final class HomeViewModel : ObservableObject {
     
     let endPoint: Endpoint = .userSearch(searchFilter: self.searchText, pages: self.searchItems)
     
-    return GitHubApi.shared.fetchUsersWithError(from: endPoint)
+    return GitHubApi.shared.searchUsersWithError(from: endPoint)
       .catch { error -> AnyPublisher<[GitHubUser], Never> in
         print("Error Block")
         self.alertDataInfo = AlertDataInfo(title: "Ощибка при Загрузке доп пользователей", message: error.localizedDescription)

@@ -83,7 +83,7 @@ struct HomeView: View {
           
           List(viewModel.models,id:\.self) { model in
             
-            NavPushButton(destination: DetailsView()) {
+            NavPushButton(destination: DetailsView(userName: model.username)) {
               UserAccountListCell(model: model)
               .onAppear {self.viewModel.isLastItem = model}
             }
