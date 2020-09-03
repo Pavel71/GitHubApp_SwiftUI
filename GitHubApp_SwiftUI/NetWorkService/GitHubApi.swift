@@ -199,6 +199,7 @@ final class GitHubApi {
    
   }
   
+  // MARK: - Fetch User Details
   func fetchUserDetail(from endpoint: Endpoint) -> AnyPublisher<DetailModel, GitHubApiError> {
     
     return Future <DetailModel, GitHubApiError> {[unowned self] promise in
@@ -232,55 +233,47 @@ final class GitHubApi {
    
   }
   
+        // MARK: - Fetch Repos
+      
+  func fetchUserRepos(from endpoint: Endpoint) -> AnyPublisher<[Repository], GitHubApiError> {
+    
+    return Future <[Repository], GitHubApiError> {[unowned self] promise in
+      
+      guard let url = endpoint.absoluteURL else {
+        return promise(.failure(.urlError(URLError(.unsupportedURL))))
+         }
+      
+      self.fetchErr(url)
+        .tryMap({ (repos) -> [Repository] in
+          return repos
+        })
+        .sink(receiveCompletion: { (complation) in
+          if case let .failure(error) = complation {
+            switch error {
+            case let urlError as URLError:
+              promise(.failure(.urlError(urlError)))
+            case let decodingError as DecodingError:
+              promise(.failure(.decodingError(decodingError)))
+            case let apiError as GitHubApiError:
+              promise(.failure(apiError))
+            default:
+              promise(.failure(.genericError))
+            }
+          }
+        }) { (repos) in
+          promise(.success(repos))
+      }.store(in: &self.subscriptions)
+      
+    }.eraseToAnyPublisher()
+   
+  }
+  
   private var subscriptions = Set<AnyCancellable>()
   
 }
 
+//
 
-//
-//      // MARK: - Fetch User
-//  func fetchUser(userName: String,
-//                      completion: @escaping (Result<DetailModel,GitHubApiError>) -> Void) {
-//
-//    let endpoint:Endpoint = .user(userName: userName)
-//
-//    fetch(endPoint: endpoint) { data,response, error in
-//      // Error
-//      if let error = error {
-//        completion(.failure(.apiError(error)))
-//
-//      }
-//      // HTTP Response
-//      if let httpResponse  = response as? HTTPURLResponse,
-//        httpResponse.statusCode != 200 {
-//        completion(.failure(.responseError(httpResponse.statusCode)))
-//
-//      }
-//      // Data
-//      if let data  = data {
-//
-////        let jsonData =  try? JSONSerialization.jsonObject(with: data, options: [])
-////        print("User Json",jsonData)
-//        let results  = self.convertNetworkDataToModel(data: data, type: DetailModel.self)
-//
-//        if let res = results  {
-//          DispatchQueue.main.async {
-//              completion(.success(res))
-//          }
-//        } else {
-////          print("User decoding Erorr")
-//          completion(.failure(.decodingError))
-//
-//        }
-//
-//      }
-//
-//    }
-//
-//
-//  }
-//
-//      // MARK: - Fetch Repos
 //  func fetchRepos(userName: String,
 //                      completion: @escaping (Result<[Repository],GitHubApiError>) -> Void) {
 //

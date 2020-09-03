@@ -90,7 +90,7 @@ struct DetailsView: View {
   private var userName : String = ""
   
   init(userName: String) {
-    print("Init Detail View")
+    
     self.userName = userName
     
   }
@@ -116,11 +116,14 @@ struct DetailsView: View {
         self.loadUserDetail()
         
       }// Vstack
+         .alert(item: $viewModel.alertDataInfo) { (alert) -> Alert in
+                     Alert(title: Text(alert.title), message: Text(alert.message), dismissButton: .cancel())
+                }
       
     }// Zstack
   }
   
-  // MARK: - Funcs
+  // MARK: - LoadModel
   
   private func loadUserDetail() {
     viewModel.loadDetailUser(userName: userName)
@@ -193,7 +196,7 @@ struct RepoCell : View {
           .foregroundColor(.blue)
       }
       
-    }
+    }.padding(.vertical)// HStack
     
   }
 }

@@ -70,15 +70,16 @@ final class HomeViewModel : ObservableObject {
   }
   
   private var emptyJust:AnyPublisher<[GitHubUser],Never> = Just([]).eraseToAnyPublisher()
-  
+  // MARK: - Text
   private var text : AnyPublisher<String,Never> {
     
     $searchText
-      .debounce(for: 0.3, scheduler: RunLoop.main)
+      .debounce(for: 0.5, scheduler: RunLoop.main)
       .removeDuplicates()
      .eraseToAnyPublisher()
   }
   
+  // MARK: Init
   init() {
     
   

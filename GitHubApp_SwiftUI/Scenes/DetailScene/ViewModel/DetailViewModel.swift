@@ -25,16 +25,41 @@ final class DetailViewModel : ObservableObject {
   location  : "--\\--")
   
   @Published var repos : [Repository] = []
-  
   @Published var alertDataInfo : AlertDataInfo?
   
   
   // MARK: - Publishers
   
-//  private var loadUserDetailsPublisher: AnyPublisher<DetailModel,Never> {
-//
-//  }
+  private func loadUserDetailsPublisher(username: String) -> AnyPublisher<DetailModel,Never> {
+ print("Пошла загрузка Details")
+    let endPoint: Endpoint = .user(userName: username)
+    
+    return GitHubApi.shared.fetchUserDetail(from: endPoint)
+      .catch { (error) -> AnyPublisher<DetailModel,Never> in
+        print("Ошибка User Detail")
+        self.alertDataInfo = AlertDataInfo(title: "Ощибка при Загрузке доп пользователей", message: error.localizedDescription)
+        return Just(self.detailModel).eraseToAnyPublisher()
+    }.eraseToAnyPublisher()
+  }
   
+  
+  private func loadUserReposPublisher(username: String) -> AnyPublisher<[Repository],Never> {
+    print("Пошла загрузка Repos")
+    let endPoint: Endpoint = .repos(userName: username)
+
+    return GitHubApi.shared.fetchUserRepos(from: endPoint)
+      .catch { (error) -> AnyPublisher<[Repository],Never> in
+        print("Ошибка Repos")
+        self.alertDataInfo = AlertDataInfo(title: "Ощибка при Загрузке доп пользователей", message: error.localizedDescription)
+        return Just([]).eraseToAnyPublisher()
+    }.eraseToAnyPublisher()
+  }
+  
+  private func combineAsynLoadTwoRequest(username: String) -> AnyPublisher<(DetailModel, [Repository]),Never> {
+    
+    Publishers.CombineLatest(loadUserDetailsPublisher(username: username), loadUserReposPublisher(username: username)).eraseToAnyPublisher()
+
+  }
 
   
   private var cancellable: Set<AnyCancellable> =  []
@@ -43,28 +68,29 @@ final class DetailViewModel : ObservableObject {
   
   init() {
     
-    // Теперь задача стоит сделать загрузку репозиториев!
-    
     $username
-      .filter{$0.isEmpty == false}
-      .flatMap { (userName) -> AnyPublisher<DetailModel,Never> in
-        guard  userName.isEmpty == false else {
-          return Just(self.detailModel).eraseToAnyPublisher()
-        }
-        let endPoint: Endpoint = .user(userName: userName)
-        return GitHubApi.shared.fetchUserDetail(from: endPoint)
-          .catch { (error) -> AnyPublisher<DetailModel,Never> in
-            print("Ошибка")
-            self.alertDataInfo = AlertDataInfo(title: "Ощибка при Загрузке доп пользователей", message: error.localizedDescription)
-            return Just(self.detailModel).eraseToAnyPublisher()
-        }.eraseToAnyPublisher()
+         .filter{$0.isEmpty == false}
+         .flatMap { (userName) -> AnyPublisher<(DetailModel, [Repository]),Never> in
+         
+           return self.combineAsynLoadTwoRequest(username: userName)
+       }.subscribe(on: DispatchQueue.global())
+         .receive(on: DispatchQueue.main)
+         .sink { (detailModel,repos) in
+           print("Пришли repos,и  DetailModel")
+           self.detailModel = detailModel
+           self.repos       = repos
+       }.store(in: &cancellable)
+    
+    
+    
+    
+    
+    
+   
 
-    }.subscribe(on: DispatchQueue.global())
-      .receive(on: DispatchQueue.main)
-      .sink(receiveValue:{ [weak self] in
-        print("Пришел результат,",$0)
-        self?.detailModel = $0
-      }).store(in:&cancellable)
+    
+    
+   
   }
 }
 
