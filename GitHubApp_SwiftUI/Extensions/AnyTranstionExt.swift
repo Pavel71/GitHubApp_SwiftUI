@@ -17,7 +17,7 @@ extension AnyTransition {
     }
   
   static var push: AnyTransition {
-      let insertion = AnyTransition.move(edge: .leading).combined(with: .opacity)
+    let insertion = AnyTransition.move(edge: .leading).combined(with: .opacity).combined(with: .opacity)
     return insertion
 
   }
