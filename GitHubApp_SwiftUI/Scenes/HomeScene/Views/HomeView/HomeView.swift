@@ -68,11 +68,14 @@ struct HomeView: View {
     @ViewBuilder private var  showLoading : some View {
       if viewModel.isLoading {
         
-        Divider()
-        HStack() {
-          Spacer()
-          Text("Loading...")
-          Spacer()
+        
+        VStack {
+          Divider()
+          HStack() {
+            Spacer()
+            Text("Loading...")
+            Spacer()
+          }
         }
       }
     }

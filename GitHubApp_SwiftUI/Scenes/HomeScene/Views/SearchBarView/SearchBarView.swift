@@ -11,6 +11,7 @@ import SwiftUI
 struct SearchBarView: View {
   
   @Binding var text : String
+  @State var isSearching = false
   var placeHolder   : String
   
   // MARK: - Views
@@ -36,22 +37,44 @@ struct SearchBarView: View {
   // MARK: - Body
     var body: some View {
       
-     HStack {
-        Image(systemName: "magnifyingglass")
-          .foregroundColor(.secondary).font(.title)
-        textField
-        clearButton
+      HStack {
+        
+        HStack {
+          
+          Image(systemName: "magnifyingglass")
+            .foregroundColor(.secondary).font(.title)
+          textField
+          
+          if isSearching {
+            clearButton
+              .transition(.opacity)
+              .animation(Animation.easeOut.delay(0.9))
+          }
+          
+        }.padding(.horizontal)
+      
+        .overlay(
+          RoundedRectangle(cornerRadius: 8)
+            .stroke(Color.gray, lineWidth: 1)
+            
+        ).onTapGesture {
+          self.isSearching = true
+        }.padding(.horizontal)
+        .transition(.move(edge: .trailing))
+        .animation(.easeOut)
          
-      }.padding(.horizontal)
-    
-      .overlay(
-        RoundedRectangle(cornerRadius: 8)
-          .stroke(Color.gray, lineWidth: 1)
-    
-      ).onTapGesture {
-//        textField
-      print("Tap Round Hstack")
-      }.padding(.horizontal)
+        if isSearching {
+          Button("Cancel") {
+            self.text        = ""
+            self.isSearching = false
+            self.hideKeyboard()
+          }.padding(.trailing)
+           .padding(.leading,-10)
+            .transition(.move(edge: .trailing))
+            .animation(.easeOut)
+        }
+        
+      }
      
         
     }

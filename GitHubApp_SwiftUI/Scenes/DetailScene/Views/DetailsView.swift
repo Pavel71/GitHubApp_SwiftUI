@@ -82,7 +82,7 @@ struct DetailsView: View {
     } // General VStack
       .frame(maxWidth: .infinity)
       .background(sustemBackgroundColor)
-    
+      .animation(.default)
       
   }
   
@@ -111,7 +111,7 @@ struct DetailsView: View {
       
       VStack(spacing:0) {
         navBar
-        header.animation(.default)
+        header
         ListRepos(models: viewModel.repos)
         
       }
@@ -190,28 +190,23 @@ struct RepoCell : View {
             Text("Stars: ").font(.headline) +
             Text("\(model.stars)")
           }
-          .opacity(isNeedMoreInfo ? 1.0 : 0.0)
           .transition(.push)
+          
    
         }
         
-      }
+      }.animation(.default)
       
       Spacer()
       Button(action: {
-        withAnimation(.easeOut) {
           self.isNeedMoreInfo.toggle()
-        }
-          
-
       }) {
         Text("More Info")
           .foregroundColor(.blue)
       }
       
     }.padding(.vertical)// HStack
-      .transition(.slide)
-      .id("123")
+     .transition(.slide)
       .animation(.easeOut)
     
   }
