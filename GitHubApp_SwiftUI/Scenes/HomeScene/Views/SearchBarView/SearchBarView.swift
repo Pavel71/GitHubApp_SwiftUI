@@ -57,7 +57,8 @@ struct SearchBarView: View {
           RoundedRectangle(cornerRadius: 8)
             .stroke(Color.gray, lineWidth: 1)
             
-        ).onTapGesture {
+          )
+          .onTapGesture {
           self.isSearching = true
         }.padding(.horizontal)
         .transition(.move(edge: .trailing))

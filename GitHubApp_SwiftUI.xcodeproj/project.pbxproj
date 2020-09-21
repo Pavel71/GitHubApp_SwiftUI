@@ -28,10 +28,9 @@
 		05B7E3C924FE594C007E216F /* GitHubUserNetwrokModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3C824FE594C007E216F /* GitHubUserNetwrokModel.swift */; };
 		05B7E3CC24FE5966007E216F /* GitHubApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3CB24FE5966007E216F /* GitHubApi.swift */; };
 		05B7E3CE24FE5BBC007E216F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3CD24FE5BBC007E216F /* HomeViewModel.swift */; };
-		05B7E3D624FE65D3007E216F /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3D424FE65D3007E216F /* ImageService.swift */; };
-		05B7E3D724FE65D3007E216F /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3D524FE65D3007E216F /* ImageLoader.swift */; };
 		05B7E3D924FE6819007E216F /* UserImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3D824FE6819007E216F /* UserImage.swift */; };
 		05B7E3DB24FE684E007E216F /* UserImageStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7E3DA24FE684E007E216F /* UserImageStyle.swift */; };
+		05D75F5325189A7800754D83 /* ImageLoaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D75F5225189A7800754D83 /* ImageLoaders.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,10 +57,9 @@
 		05B7E3C824FE594C007E216F /* GitHubUserNetwrokModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubUserNetwrokModel.swift; sourceTree = "<group>"; };
 		05B7E3CB24FE5966007E216F /* GitHubApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubApi.swift; sourceTree = "<group>"; };
 		05B7E3CD24FE5BBC007E216F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		05B7E3D424FE65D3007E216F /* ImageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
-		05B7E3D524FE65D3007E216F /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		05B7E3D824FE6819007E216F /* UserImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserImage.swift; sourceTree = "<group>"; };
 		05B7E3DA24FE684E007E216F /* UserImageStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserImageStyle.swift; sourceTree = "<group>"; };
+		05D75F5225189A7800754D83 /* ImageLoaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoaders.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,20 +259,18 @@
 		05B7E3CA24FE5953007E216F /* NetWorkService */ = {
 			isa = PBXGroup;
 			children = (
-				05B7E3D324FE65D3007E216F /* ImageService */,
+				05D75F5125189A4400754D83 /* ImageServices */,
 				05B7E3CB24FE5966007E216F /* GitHubApi.swift */,
 			);
 			path = NetWorkService;
 			sourceTree = "<group>";
 		};
-		05B7E3D324FE65D3007E216F /* ImageService */ = {
+		05D75F5125189A4400754D83 /* ImageServices */ = {
 			isa = PBXGroup;
 			children = (
-				05B7E3D424FE65D3007E216F /* ImageService.swift */,
-				05B7E3D524FE65D3007E216F /* ImageLoader.swift */,
+				05D75F5225189A7800754D83 /* ImageLoaders.swift */,
 			);
-			name = ImageService;
-			path = "../../../Combine/MovieProject/CombineFetchAPI-master/CombineFetchAPI-NOError/CombineFetchAPI-MY/Services/ImageService";
+			path = ImageServices;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,13 +348,12 @@
 			files = (
 				05490A0824FE86930088A02E /* AlertDataInfo.swift in Sources */,
 				0503FD2924FE581A00BCF7E8 /* SearchBarView.swift in Sources */,
-				05B7E3D624FE65D3007E216F /* ImageService.swift in Sources */,
 				0529438524FFE31B00566633 /* DetailViewModel.swift in Sources */,
 				0503FD0924FE54A700BCF7E8 /* AppDelegate.swift in Sources */,
+				05D75F5325189A7800754D83 /* ImageLoaders.swift in Sources */,
 				05B7E3D924FE6819007E216F /* UserImage.swift in Sources */,
 				05B7E3CE24FE5BBC007E216F /* HomeViewModel.swift in Sources */,
 				05B7E3C924FE594C007E216F /* GitHubUserNetwrokModel.swift in Sources */,
-				05B7E3D724FE65D3007E216F /* ImageLoader.swift in Sources */,
 				0529438224FFE2C100566633 /* DetailScreenModel.swift in Sources */,
 				0529437F24FFDC7800566633 /* AnyTranstionExt.swift in Sources */,
 				05B7E3CC24FE5966007E216F /* GitHubApi.swift in Sources */,
