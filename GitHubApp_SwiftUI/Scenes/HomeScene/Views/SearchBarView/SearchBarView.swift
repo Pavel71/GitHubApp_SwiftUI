@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Introspect
 
 struct SearchBarView: View {
   
@@ -18,6 +19,11 @@ struct SearchBarView: View {
   
   private var textField : some View {
     TextField(placeHolder, text: $text)
+      .introspectTextField { textField in
+        if self.isSearching {
+          textField.becomeFirstResponder()
+        }
+    }
     .frame(height: 52)
   }
   
@@ -44,7 +50,7 @@ struct SearchBarView: View {
           Image(systemName: "magnifyingglass")
             .foregroundColor(.secondary).font(.title)
           textField
-          
+            
           if isSearching {
             clearButton
               .transition(.opacity)
@@ -56,11 +62,10 @@ struct SearchBarView: View {
         .overlay(
           RoundedRectangle(cornerRadius: 8)
             .stroke(Color.gray, lineWidth: 1)
-            
-          )
-          .onTapGesture {
-          self.isSearching = true
-        }.padding(.horizontal)
+           )
+        .contentShape(RoundedRectangle(cornerRadius: 8))
+        .onTapGesture {self.isSearching = true}
+        .padding(.horizontal)
         .transition(.move(edge: .trailing))
         .animation(.easeOut)
          
@@ -86,3 +91,4 @@ struct SearchBarView_Previews: PreviewProvider {
       SearchBarView(text: .constant(""), placeHolder: "Search...")
     }
 }
+

@@ -18,21 +18,21 @@ struct UserImage: View {
   
   var body: some View {
     ZStack {
-      if self.imageLoader.image != nil {
+      
+      if self.imageLoader.imageLoaded {
+        
         Image(uiImage: self.imageLoader.image!)
           .resizable()
           .renderingMode(.original)
-          
           .imageStyle(loaded: true, size: size)
-          .animation(.easeInOut)
-          .onAppear{
-            self.isImageLoaded = true
-        }
+
       } else {
         Rectangle()
           .foregroundColor(.gray)
           .imageStyle(loaded: false, size: size)
       }
+      
+      
     }
   }
 }

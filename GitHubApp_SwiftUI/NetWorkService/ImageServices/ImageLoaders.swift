@@ -18,6 +18,7 @@ import Foundation
 
 import UIKit
 import Combine
+import SwiftUI
 
  //---------------
 class ImageLoaderCache {
@@ -45,15 +46,23 @@ final class ImageLoader: ObservableObject {
     @Published var url: URL?
     // output
     @Published var image: UIImage?
+    @Published var imageLoaded  = false
 
     init(url: URL?) {
+       imageLoaded = false
         self.url = url
         $url
-            .flatMap { (path) -> AnyPublisher<UIImage?, Never> in
-               self.fetchImage(for: url)
-            }
-            .assign(to: \.image, on: self)
-            .store(in: &self.cancellableSet)
+          .flatMap { (path) -> AnyPublisher<UIImage?, Never> in
+            self.fetchImage(for: url)
+        }
+        .sink(receiveValue: { (image) in
+          withAnimation {
+            self.image       = image
+            self.imageLoaded = true
+          }
+          
+        })
+          .store(in: &self.cancellableSet)
     }
     private var cancellableSet: Set<AnyCancellable> = []
 
